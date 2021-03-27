@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Navbar, Row, Col, Container } from "react-bootstrap";
+import { Navbar, NavDropdown, Row, Col, Container } from "react-bootstrap";
 
 const Layout = ({ children }) => {
   return (
@@ -14,9 +14,21 @@ const Layout = ({ children }) => {
           </Link>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
+            {/* <Navbar.Text>
               Signed in as: <a href="#login">Mark Otto</a>
-            </Navbar.Text>
+            </Navbar.Text> */}
+            <NavDropdown title="Ilham Adiputra" id="basic-nav-dropdown">
+              <NavDropdown.Item>
+                <Link href="/insert">
+                  <a>Insert post</a>
+                </Link>
+              </NavDropdown.Item>
+
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Separated link
+              </NavDropdown.Item>
+            </NavDropdown>
           </Navbar.Collapse>
         </Container>
       </Navbar>
