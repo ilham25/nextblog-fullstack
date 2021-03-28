@@ -18,11 +18,11 @@ const Layout = ({ children }) => {
               Signed in as: <a href="#login">Mark Otto</a>
             </Navbar.Text> */}
             <NavDropdown title="Ilham Adiputra" id="basic-nav-dropdown">
-              <NavDropdown.Item>
-                <Link href="/insert">
-                  <a>Insert post</a>
-                </Link>
-              </NavDropdown.Item>
+              <Link href="/insert">
+                <NavDropdown.Item as="a" href="/insert">
+                  Insert Post
+                </NavDropdown.Item>
+              </Link>
 
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">

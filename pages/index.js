@@ -22,7 +22,7 @@ export default function Home({ posts }) {
                 <Card.Text className="text-nowrap overflow-hidden text-truncate text-secondary">
                   {post.content}
                 </Card.Text>
-                <Link href="/post">
+                <Link href={"/post/" + post.id}>
                   <Button variant="primary">Read More</Button>
                 </Link>
               </Card.Body>
@@ -39,6 +39,7 @@ export async function getStaticProps() {
     query: gql`
       query {
         getAllPosts {
+          id
           title
           content
           userPost {

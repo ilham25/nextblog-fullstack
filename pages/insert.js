@@ -30,7 +30,7 @@ const Insert = () => {
         }
       `,
     });
-    console.log("resp", response);
+    console.log("resp", response.data.addPost);
   };
 
   return (
