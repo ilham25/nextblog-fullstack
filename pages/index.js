@@ -6,10 +6,24 @@ import Content from "../components/Content";
 import { gql } from "@apollo/client";
 import client from "../utils/apollo-client";
 
-// import { dummyPost } from "../utils/data";
-
 export default function Home({ posts }) {
   console.log(posts);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await client.mutate({
+        variables: { id },
+        mutation: gql`
+          mutation removePost($id: Int) {
+            deletePost(id: $id)
+          }
+        `,
+      });
+
+      console.log(response);
+    } catch (error) {}
+  };
+
   return (
     <>
       <Content>
@@ -25,6 +39,13 @@ export default function Home({ posts }) {
                 <Link href={"/post/" + post.id}>
                   <Button variant="primary">Read More</Button>
                 </Link>
+                <Button
+                  onClick={() => handleDelete(post.id)}
+                  className="ml-2"
+                  variant="danger"
+                >
+                  Delete Post
+                </Button>
               </Card.Body>
             </Card>
           </Col>

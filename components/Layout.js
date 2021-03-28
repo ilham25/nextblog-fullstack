@@ -14,9 +14,6 @@ const Layout = ({ children }) => {
           </Link>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            {/* <Navbar.Text>
-              Signed in as: <a href="#login">Mark Otto</a>
-            </Navbar.Text> */}
             <NavDropdown title="Ilham Adiputra" id="basic-nav-dropdown">
               <Link href="/insert">
                 <NavDropdown.Item as="a" href="/insert">
@@ -25,9 +22,7 @@ const Layout = ({ children }) => {
               </Link>
 
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
+              <NavDropdown.Item href="/">Separated link</NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
         </Container>
@@ -37,11 +32,7 @@ const Layout = ({ children }) => {
       <footer className="py-3">
         <Row>
           <Col sm={12} className="text-center">
-            <p>
-              <p className="text-secondary">
-                Copyright | Ilham Adiputra | 2021
-              </p>
-            </p>
+            <p className="text-secondary">Copyright | Ilham Adiputra | 2021</p>
           </Col>
         </Row>
       </footer>

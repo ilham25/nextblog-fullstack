@@ -1,8 +1,9 @@
+import { gql } from "@apollo/client";
+
 import { Form, Col, Button } from "react-bootstrap";
 
 import Content from "../components/Content";
 
-import { gql } from "@apollo/client";
 import client from "../utils/apollo-client";
 
 const Insert = () => {
@@ -14,23 +15,27 @@ const Insert = () => {
       userId: 1,
     };
 
-    console.log(data);
-    const response = await client.mutate({
-      variables: {
-        title: data.title,
-        content: data.content,
-        userId: data.userId,
-      },
-      mutation: gql`
-        mutation insertPost($title: String, $content: String, $userId: Int) {
-          addPost(title: $title, content: $content, userId: $userId) {
-            title
-            content
+    try {
+      const response = await client.mutate({
+        variables: {
+          title: data.title,
+          content: data.content,
+          userId: data.userId,
+        },
+        mutation: gql`
+          mutation insertPost($title: String, $content: String, $userId: Int) {
+            addPost(title: $title, content: $content, userId: $userId) {
+              title
+              content
+            }
           }
-        }
-      `,
-    });
-    console.log("resp", response.data.addPost);
+        `,
+        errorPolicy: "all",
+      });
+    } catch (error) {
+      // errorLink;
+      console.log("error", error);
+    }
   };
 
   return (
