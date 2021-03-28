@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { gql } from "@apollo/client";
+import { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
 
 import { Form, Col, Button } from "react-bootstrap";
 
@@ -9,39 +10,39 @@ import client from "../utils/apollo-client";
 
 const Insert = () => {
   const router = useRouter();
+  const [form, setForm] = useState({
+    title: "",
+    content: "",
+  });
+
+  const { title, content } = form;
+
+  const INSERT_POST = gql`
+    mutation($title: String, $content: String, $userId: Int) {
+      addPost(title: $title, content: $content, userId: $userId) {
+        title
+        content
+      }
+    }
+  `;
+
+  const [insertPost] = useMutation(INSERT_POST);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
-      title: e.target.title.value,
-      content: e.target.content.value,
-      userId: 1,
-    };
 
-    try {
-      const response = await client.mutate({
-        variables: {
-          title: data.title,
-          content: data.content,
-          userId: data.userId,
-        },
-        mutation: gql`
-          mutation insertPost($title: String, $content: String, $userId: Int) {
-            addPost(title: $title, content: $content, userId: $userId) {
-              title
-              content
-            }
-          }
-        `,
-        errorPolicy: "all",
-      });
-      response.data && router.push("/");
-    } catch (error) {
-      // errorLink;
-      console.log("error", error);
-    }
+    console.log({ title, content, userId: 2 });
+
+    insertPost({ variables: { title, content, userId: 2 } });
+    router.push("/");
   };
 
+  const onChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <>
       <Content>
@@ -53,6 +54,8 @@ const Insert = () => {
                 name="title"
                 type="text"
                 placeholder="Enter your post title"
+                value={title}
+                onChange={(e) => onChange(e)}
               />
             </Form.Group>
             <Form.Group controlId="postContent">
@@ -62,6 +65,8 @@ const Insert = () => {
                 as="textarea"
                 style={{ resize: "none", minHeight: "195px" }}
                 rows={3}
+                value={content}
+                onChange={(e) => onChange(e)}
               />
             </Form.Group>
             <Button variant="primary" type="submit">

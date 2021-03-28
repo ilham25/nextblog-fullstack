@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
 import { Form, Col, Button } from "react-bootstrap";
 
@@ -65,36 +65,23 @@ const Edit = ({ post }) => {
   });
 
   const { title, content } = form;
+
+  const UPDATE_POST = gql`
+    mutation($id: Int, $title: String, $content: String) {
+      updatePost(id: $id, title: $title, content: $content) {
+        title
+        content
+      }
+    }
+  `;
+
+  const [updatePost] = useMutation(UPDATE_POST);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
-      title,
-      content,
-    };
 
-    try {
-      const response = await client.mutate({
-        variables: {
-          id: post.id,
-          title: data.title,
-          content: data.content,
-        },
-        mutation: gql`
-          mutation editPost($id: Int, $title: String, $content: String) {
-            updatePost(id: $id, title: $title, content: $content) {
-              title
-              content
-            }
-          }
-        `,
-        errorPolicy: "all",
-      });
-      console.log(response);
-      response.data && router.push("/");
-    } catch (error) {
-      // errorLink;
-      console.log("error", error);
-    }
+    updatePost({ variables: { id: post.id, title, content } });
+    router.push("/");
   };
 
   const onChange = (e) => {
