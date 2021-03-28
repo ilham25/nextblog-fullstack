@@ -6,7 +6,7 @@ import Content from "../components/Content";
 import { gql } from "@apollo/client";
 import client from "../utils/apollo-client";
 
-import { dummyPost } from "../utils/data";
+// import { dummyPost } from "../utils/data";
 
 export default function Home({ posts }) {
   console.log(posts);
