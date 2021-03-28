@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { gql } from "@apollo/client";
 
 import { Form, Col, Button } from "react-bootstrap";
@@ -7,6 +8,8 @@ import Content from "../components/Content";
 import client from "../utils/apollo-client";
 
 const Insert = () => {
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -32,6 +35,7 @@ const Insert = () => {
         `,
         errorPolicy: "all",
       });
+      response.data && router.push("/");
     } catch (error) {
       // errorLink;
       console.log("error", error);

@@ -1,16 +1,25 @@
 import Link from "next/link";
+import { useState } from "react";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 import { Button, Row, Col, Container, Card } from "react-bootstrap";
 import Content from "../components/Content";
 
 import { gql } from "@apollo/client";
-import client from "../utils/apollo-client";
+// import client from "../utils/apollo-client";
 
-export default function Home({ posts }) {
-  console.log(posts);
+export default function Home({ results }) {
+  const initialState = results;
+
+  const [posts, setPosts] = useState(initialState);
 
   const handleDelete = async (id) => {
     try {
+      const client = new ApolloClient({
+        uri: "http://localhost:4000/",
+        cache: new InMemoryCache(),
+      });
+
       const response = await client.mutate({
         variables: { id },
         mutation: gql`
@@ -20,8 +29,13 @@ export default function Home({ posts }) {
         `,
       });
 
-      console.log(response);
-    } catch (error) {}
+      setPosts((previous) => {
+        const tempPosts = previous.filter((item) => item.id !== id);
+        return tempPosts;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -44,8 +58,13 @@ export default function Home({ posts }) {
                   className="ml-2"
                   variant="danger"
                 >
-                  Delete Post
+                  Delete
                 </Button>
+                <Link href={"/edit/" + post.id}>
+                  <Button className="ml-2" variant="success">
+                    Edit
+                  </Button>
+                </Link>
               </Card.Body>
             </Card>
           </Col>
@@ -56,7 +75,12 @@ export default function Home({ posts }) {
 }
 
 export async function getStaticProps() {
-  const { data } = await client.query({
+  const client = new ApolloClient({
+    uri: "http://localhost:4000/",
+    cache: new InMemoryCache(),
+  });
+
+  const response = await client.query({
     query: gql`
       query {
         getAllPosts {
@@ -72,7 +96,7 @@ export async function getStaticProps() {
   });
   return {
     props: {
-      posts: data.getAllPosts,
+      results: response.data.getAllPosts,
     },
   };
 }
